@@ -1,0 +1,14 @@
+{% if user.is_authenticated %}
+welcome to wolfpay <b>{{ user.username }}</b>
+<a href="{% url 'logout' %}">logout</a>
+{% else %}
+let me give u powerful service! Join us!
+<a href="{% url 'login' %}">login</a>
+<a href="{% url 'join' %}">join</a>
+{% endif %}
+<hr>
+<br>hi nice to meet u!<br>
+<a href="{% url 'product' %}">상품관리</a>
+<a href="#">주문관리</a>
+<a href="#">매출관리</a>
+<a href="#">가맹점정보</a>

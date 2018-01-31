@@ -1,0 +1,12 @@
+<a href="#">상품추가</a>
+<hr>
+{% for i in p %}
+<h3><ul>{{ i.name }}</ul></h3>
+<li>{{ i.url }}</li>
+<li>{{ i.op }}</li>
+<a href="{% url 'button' s.id i.id %}">버튼</a>
+<a href="#">버튼소스</a>
+<a href="#">수정</a>
+<a href="#">삭제</a>
+<hr>
+{% endfor %}
