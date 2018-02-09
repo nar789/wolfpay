@@ -1,0 +1,32 @@
+{% load staticfiles %}
+
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.1.min.js"></script>
+		<script type="text/javascript" src="{% static 'wolfpay/js/product.js' %}"></script>
+	</head>
+<body>
+<a href="{% url 'history' %}">결제내역보기</a>
+<form id=pay method="POST">
+	{% csrf_token %}
+	<h3>{{ addr }}</h3>
+	<input name="tid" type=hidden value="{{ tid }}">
+	<input name="op" id=op type=hidden value="">
+	<div id="qrcode"></div>
+	<hr>
+	<div id=op0><script>show_option("{{ op|escapejs }}","0");</script></div>
+	<hr>
+	이름 <input id=name name="name"><br>
+	핸드폰 <input id=phone name="phone"><br>
+	확정금액 <input name="price" id=price readonly>satoshi<br>
+	확정금액 <input id=btcprice readonly>BTC<br>
+	<div onclick='pay()' style="width: 200px;height:30px;background-color: black; color:white;text-align: center;">결제완료</div>
+	<div id=time></div>
+	유효시간이 만료되면 새로운 주소가 갱신됩니다.
+</form>
+</body>
+<script type="text/javascript" src="{% static 'wolfpay/js/jquery.qrcode.min.js' %}"></script>
+<script>let currency_url="{% url 'currency' price %}";</script>
+<script type="text/javascript" src="{% static 'wolfpay/js/pay.js' %}"></script>
+</html>

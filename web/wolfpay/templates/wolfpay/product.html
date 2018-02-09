@@ -1,12 +1,19 @@
-<a href="#">상품추가</a>
+
+
+{% load staticfiles %}
+<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="{% static 'wolfpay/js/product.js' %}"></script>
+<a href="{% url 'add_product' %}">상품추가</a>
 <hr>
 {% for i in p %}
 <h3><ul>{{ i.name }}</ul></h3>
 <li>{{ i.url }}</li>
-<li>{{ i.op }}</li>
-<a href="{% url 'button' s.id i.id %}">버튼</a>
-<a href="#">버튼소스</a>
-<a href="#">수정</a>
-<a href="#">삭제</a>
+<li id=op{{ i.id }}></li>
+<script>show_option("{{ i.op|escapejs }}","{{ i.id }}");</script>
+<li>{{ i.price }}</li>
+<a href="{% url 'button' i.id %}">버튼</a>
+<a href="{% url 'source_product' i.id  %}">버튼소스</a>
+<a href="{% url 'update_product' i.id %}">수정</a>
+<a href="{% url 'delete_product' i.id %}">삭제</a>
 <hr>
 {% endfor %}

@@ -1,0 +1,19 @@
+{% load staticfiles %}
+<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="{% static 'wolfpay/js/product.js' %}"></script>
+{% if s %}
+		{% for si in s %} 
+		  <h3>{{si.name}}</h3>
+		  <h5>{{si.addr}}</h5>
+		  <div id=op{{ si.id }}><script>show_option("{{ si.op|escapejs }}","{{ si.id }}");</script></div>
+		  {{si.time}} / 가격:{{si.korprice}}원 / 확정된금액:{{si.price}} / 입금된금액:{{si.btcprice}} / 상태:{{si.status}}
+		  <hr>
+		{% endfor %}
+{% else %}
+	<form method=POST>
+		{% csrf_token %}
+		이름<input name="name"><br>
+		폰번호<input name="phone"><br>
+		<input type=submit value="결제내역보기">
+	</form>
+{% endif %}

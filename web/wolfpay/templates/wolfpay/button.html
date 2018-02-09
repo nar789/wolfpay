@@ -1,2 +1,3 @@
 <h3>"{{ p.name }}" by (c){{ s.name }}</h3>
-<button onclick="location.href='{% url 'pay' s.id p.id %}'">{{ p.price }}원</button> <i>created by wolfpay</i>
+<button onclick="location.href='{% url 'pay' p.id %}'">{{ p.price }}원 결제</button> <i>created by wolfpay</i><br>
+<a href="{% url 'history' %}">결제내역보기</a>

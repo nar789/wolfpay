@@ -1,0 +1,6 @@
+{% for si in s %}
+		  <h5>{{ si.id }} / {{si.name}} / {{si.addr}} / {{ si.customer }} / {{ si.phone }}</h5>
+		  <div id=op{{ si.id }}><script>show_option("{{ si.op|escapejs }}","{{ si.id }}");</script></div>
+		  {{si.time}} / 가격:{{si.korprice}}원 / 확정된금액:{{si.price}} / 입금된금액:{{si.btcprice}} / 상태:{{si.status}}
+		  <hr>
+{% endfor %}

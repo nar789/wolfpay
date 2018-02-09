@@ -1,0 +1,33 @@
+{% load staticfiles %}
+<body>
+	<form id=add_prod_form method="POST">
+		{% csrf_token %}	
+		상품명 <input id=name name="name" value="{{ p.name }}"><br>
+		상품페이지주소 <input id=url name="url" value="{{ p.url }}"><br>
+		상품가격 <input id=price name="price" value="{{ p.price }}"><br>
+		<input type=hidden id=op name=op>
+		<hr>
+		옵션이름 <input id="op_title"><br>
+		옵션내용 <b onclick='add()'>추가</b><br>
+		<div id=op_container>
+			<div id=op1><input id="op_content1"><b onclick='del(1)'>삭제</b></div>
+		</div>
+		<br><div id=op_save onclick="op_save()" style="width:200px; height: 30px; background-color: gray; color:white; text-align: center;line-height: 30px;">옵션저장</div>
+		<hr>
+		<div id=op_confirm>
+		</div>
+		<br>
+		<div id=save onclick='save()' style="width:200px; height: 30px; background-color: black; color:white; text-align: center;line-height: 30px;">
+			{% if update is True %}
+			상품수정
+			{% else %}
+			상품생성
+			{% endif %}
+		</div>
+	</form>
+</body>
+<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="{% static 'wolfpay/js/add_product.js' %}"></script>
+{% if p is not None %}
+		<script>insert_option("{{ p.op|escapejs }}");</script>
+{% endif %}
