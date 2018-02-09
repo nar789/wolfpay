@@ -1,4 +1,4 @@
-/core/
+/core/*.*
 /web/wolfpay/coin.py
 /web/wolfpay/coin.pyc
 /web/wolfpay/coin/
