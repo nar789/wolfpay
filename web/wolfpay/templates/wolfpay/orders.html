@@ -1,15 +1,55 @@
+{% extends "wolfpay/index.html" %}
+{% block content %}
+	{% load staticfiles %}
+	<link href="{% static 'wolfpay/css/orders.css' %}" rel="stylesheet">
+	<link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
+	<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.1.min.js"></script>
+	<script type="text/javascript" src="{% static 'wolfpay/js/product.js' %}"></script>
+	
+	<div id=content class="list-group">
+		<button class="list-group-item list-group-item-action active">
+		    <i class="fas fa-list-ul"></i>&nbsp;고객 주문 내역
+		</button>
+		{% for si in s %}
+				<button type="button" class="list-group-item list-group-item-action table-responsive" style="padding-left: 0px; padding-right: 0px;">
+					<table class="text-center table">
+						<tr>
+							<td colspan="3"><h3 class="line">{{si.name}}</h3> <h6 class=line><a href="{{ si.url }}" target="blank"><i class="fas fa-link">상품페이지</i></a></h6></td>
+						</tr>
+						<tr>
+							<td colspan="3"><h3>{{si.name}}</h3></td>
+						</tr>
+						<tr height='50'>
+							<td colspan="3"><div id=op{{ si.id }}><script>show_option("{{ si.op|escapejs }}","{{ si.id }}");</script></div></td>
+						</tr>
+						<tr height=50>
+							<td><h6 class=info><i class="fas fa-address-book"></i>입금주소</h6>
+								<h5><a class="addr" data-toggle="tooltip" data-placement="right" title="{{ si.addr }}">{{si.addr}}</a></h5>
+							</td>
+							<td><h6 class=info><i class="fas fa-user"></i>고객명</h6>
+								<h5>{{ si.customer }}</h5>
+							</td>
+							<td><h6 class=info><i class="fas fa-phone"></i>폰번호</h6>
+								<h5>{{ si.phone }}</h5>
+							</td>
+						</tr>
+						<tr class=tr-prc>
+							<td width="33%"><h6 class=info><i class="fas fa-won-sign"></i>원화</h6> <h5>{{si.korprice}}원</h5></td><td width="33%"><h6 class=info><i class="fab fa-btc" aria-hidden="true"></i>확정금액</h6> <h5>{{ si.price }}</h5></td><td width="33%"><h6 class=info><i class="fab fa-btc" aria-hidden="true"></i>입금금액</h6> <h5>{{ si.btcprice }}</h5></td>
+						</tr>
+					</table>
+				</button>
+		{% endfor %}
+	</div>
+	{% csrf_token %}
+	<div id=more>
+		<button type='button' class='btn btn-success btn-lg btn-block' onclick='more("{% url 'orders' %}")'>더보기</button>
+	</div>
 
-{% load staticfiles %}
-<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.1.min.js"></script>
-<script type="text/javascript" src="{% static 'wolfpay/js/product.js' %}"></script>
-<div id=content>
-	{% for si in s %}
-			  <h5>{{ si.id }} / {{si.name}} / {{si.addr}} / {{ si.customer }} / {{ si.phone }}</h5>
-			  <div id=op{{ si.id }}><script>show_option("{{ si.op|escapejs }}","{{ si.id }}");</script></div>
-			  {{si.time}} / 가격:{{si.korprice}}원 / 확정된금액:{{si.price}} / 입금된금액:{{si.btcprice}} / 상태:{{si.status}}
-			  <hr>
-	{% endfor %}
-</div>
-{% csrf_token %}
-<div id=more onclick='more("{% url 'orders' %}")'>더보기</div>
-<script type="text/javascript" src="{% static 'wolfpay/js/orders.js' %}"></script>
+	<!--<div id=more onclick='more("{% url 'orders' %}")'>더보기</div>//-->
+	<script type="text/javascript" src="{% static 'wolfpay/js/orders.js' %}"></script>
+	<script>
+	$(document).ready(function(){
+	    $('[data-toggle="tooltip"]').tooltip();   
+	});
+	</script>
+{% endblock %}

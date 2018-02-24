@@ -1,0 +1,10 @@
+{% load staticfiles %}
+<link href="{% static 'wolfpay/css/complete_product.css' %}" rel="stylesheet">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<div class="text-center">
+		<center><img class="back" src="{% static 'wolfpay/img/complete_prod_back.png' %}"></center>
+		<h3>
+		{{ msg }}
+		</h3>
+		<button class="btn btn-info" onclick="location.href='{% url 'history' %}'">결제내역확인</button> <button class="btn btn-success" onclick="location.href='{% url 'index' %}'">울프페이와 함게하세요!</button>
+	</div>

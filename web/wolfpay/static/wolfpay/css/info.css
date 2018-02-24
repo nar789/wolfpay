@@ -1,0 +1,22 @@
+body {
+  padding-bottom: 40px;
+  background-color: #fff;
+}
+h6{
+	color:gray;
+	display: inline-block;
+}
+h5{
+	display: inline-block;
+	color:gray;
+}
+h4{
+	color:#ff9800;
+	vertical-align: middle;
+}
+span{
+	display: inline-block;
+	right:0px;
+	top:0px;
+	margin-top: 10px;
+}

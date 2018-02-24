@@ -1,6 +1,7 @@
 var op_cnt=1;
 var op_confirm_cnt=0;
 var op={'data':[]};
+
 function del(idx) {
 	if($("#op"+idx)){
 		$("#op"+idx).remove();
@@ -9,7 +10,8 @@ function del(idx) {
 
 function add(){
 	op_cnt++;
-	$("#op_container").append("<div id=op"+op_cnt+"><input id=\"op_content"+op_cnt+"\"><b onclick='del("+op_cnt+")'>삭제</b></div>");
+	$("#op_container").append("<div id=op"+op_cnt+"><input id=\"op_content"+op_cnt+"\" class=\"form-control op-input\">&nbsp;<b onclick='del("+op_cnt+
+		")' class=\"btn btn-danger\"><i class=\"fas fa-trash-alt\"></i></b></div>");
 }
 
 function op_save(){
@@ -23,9 +25,9 @@ function op_save(){
 			op['data'][op_confirm_cnt]["op"][cnt++]=content;
 	}
 	
-	$("#op_confirm").append("<div id=op_confirm_container"+op_confirm_cnt+">"+title
+	$("#op_confirm").append("<div id=op_confirm_container"+op_confirm_cnt+">"+"<span class='badge'>"+title+"</span>"
 		+" <select id=op_confirm_select"+op_confirm_cnt
-		+"></select> <b onclick='op_confirm_del("+op_confirm_cnt+")'>삭제</b></div>");
+		+"></select> <b class='btn btn-danger' onclick='op_confirm_del("+op_confirm_cnt+")'><i class=\"fas fa-trash-alt\"></i></b></div>");
 	var cnt=0;
 	for(var i=1;i<=op_cnt;i++){
 		let content=$("#op_content"+i).val();
@@ -55,9 +57,9 @@ function save(){
 	var name=$("#name").val();
 	var url=$("#url").val();
 	var price=$("#price").val();
-	if(!name)alert("상품명을 입력해주세요.");
-	else if(!url)alert("상품페이지 주소를 입력해주세요.");
-	else if(!price)alert("상품가격을 입력해주세요.");
+	if(!name){alert("상품명을 입력해주세요.");return;}
+	else if(!url){alert("상품페이지 주소를 입력해주세요.");return;}
+	else if(!price){alert("상품가격을 입력해주세요.");return;}
 	s={'data':[]}
 	for(var i=0;i<op_confirm_cnt;i++){
 		let title=op['data'][i]['title'];

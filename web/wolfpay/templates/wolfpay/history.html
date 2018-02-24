@@ -1,19 +1,83 @@
 {% load staticfiles %}
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"> 
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link href="{% static 'wolfpay/css/history.css' %}" rel="stylesheet">
+<link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
 <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.1.min.js"></script>
 <script type="text/javascript" src="{% static 'wolfpay/js/product.js' %}"></script>
+
+<div class="container">
+	<a href="{% url 'history' %}"><button class="btn btn-success" class=move-index>결제내역조회</button></a>
+	<a href='{% url 'index' %}'><button class="btn btn-info" class=move-index>울프페이로 이동</button></a><br>
 {% if s %}
+<br>
+	<div id=content class="list-group">
+			<button class="list-group-item list-group-item-action active">
+			    <i class="fas fa-list-ul"></i>&nbsp;결제 내역
+			</button>
 		{% for si in s %} 
-		  <h3>{{si.name}}</h3>
-		  <h5>{{si.addr}}</h5>
-		  <div id=op{{ si.id }}><script>show_option("{{ si.op|escapejs }}","{{ si.id }}");</script></div>
-		  {{si.time}} / 가격:{{si.korprice}}원 / 확정된금액:{{si.price}} / 입금된금액:{{si.btcprice}} / 상태:{{si.status}}
-		  <hr>
-		{% endfor %}
+				<button type="button" class="list-group-item list-group-item-action table-responsive" style="padding-left: 0px; padding-right: 0px;">
+						<table class="text-center table">
+							<tr>
+								<td colspan="3"><div class="id">No.{{ si.id }}</div><p class=time>주문시간 {{si.time}}</p></td>
+							</tr>
+							<tr>
+								<td colspan="3"><h3 class="line">{{si.name}}</h3> <h6 class=line><a href="{{ si.url }}" target="blank"><i class="fas fa-link">상품페이지</i></a></h6></td>
+							</tr>
+							<tr height='50'>
+								<td colspan="3"><div id=op{{ si.id }}><script>show_option("{{ si.op|escapejs }}","{{ si.id }}");</script></div></td>
+							</tr>
+							<tr height=50>
+								<td><h6 class=info><i class="fas fa-address-book"></i>입금주소</h6>
+									<h5><p class="addr">{{si.addr}}</p></h5>
+								</td>
+								<td><h6 class=info><i class="fas fa-user"></i>고객명</h6>
+									<h5>{{ si.customer }}</h5>
+								</td>
+								<td><h6 class=info><i class="fas fa-phone"></i>폰번호</h6>
+									<h5>{{ si.phone }}</h5>
+								</td>
+							</tr>
+							<tr class=tr-prc>
+								<td width="33%"><h6 class=info><i class="fas fa-won-sign"></i>원화</h6> <h5>{{si.korprice}}원</h5></td><td width="33%"><h6 class=info><i class="fab fa-btc" aria-hidden="true"></i>확정금액</h6> <h5>{{ si.price }}</h5></td><td width="33%"><h6 class=info><i class="fab fa-btc" aria-hidden="true"></i>입금금액</h6> <h5>{{ si.btcprice }}</h5></td>
+							</tr>
+						</table>
+					</button>
+				<!--
+			  <h3>{{si.name}}</h3>
+			  <h5>{{si.addr}}</h5>
+			  <div id=op{{ si.id }}><script>show_option("{{ si.op|escapejs }}","{{ si.id }}");</script></div>
+			  {{si.time}} / 가격:{{si.korprice}}원 / 확정된금액:{{si.price}} / 입금된금액:{{si.btcprice}} / 상태:{{si.status}}
+			  <hr>//-->
+			{% endfor %}
+		</div>
 {% else %}
 	<form method=POST>
 		{% csrf_token %}
-		이름<input name="name"><br>
-		폰번호<input name="phone"><br>
-		<input type=submit value="결제내역보기">
+		<h3 class="form-signin-heading"><i class="fab fa-btc" aria-hidden="true"></i>결제내역조회</h3>
+		<h5 class="form-signin-heading">울프페이와 함께하세요!</h5>
+		<hr>
+		<div class="form-group">
+		<label for="name" class="cols-sm-2 control-label">결제자성명</label>
+		<div class="cols-sm-10">
+				<div class="input-group">
+					<span class="input-group-addon"><i class="fa fa-tag" aria-hidden="true"></i></span>
+					<input type="text" class="form-control" name="name" placeholder="결제자성명을 입력해주세요." required autofocus/>
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+		<label for="name" class="cols-sm-2 control-label">결제자핸드폰</label>
+		<div class="cols-sm-10">
+				<div class="input-group">
+					<span class="input-group-addon"><i class="fas fa-phone" aria-hidden="true"></i></span>
+					<input type="text" class="form-control" name="phone" placeholder="결제자핸드폰 번호를 입력해주세요." required/>
+				</div>
+			</div>
+		</div>
+		<hr>
+		<input type=submit value="결제내역보기" class="btn btn-info btn-block btn-lg">
 	</form>
 {% endif %}
+</div>

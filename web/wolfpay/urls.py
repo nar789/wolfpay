@@ -3,6 +3,7 @@ from . import views
 
 urlpatterns=[
 	url(r'^$',views.index,name='index'),
+
 	url(r'^accounts/logout/$',views.logoutview,name='logout'),
 	url(r'^accounts/login/$',views.loginview,name='login'),
 	url(r'^accounts/join/$',views.joinview,name='join'),
@@ -20,5 +21,15 @@ urlpatterns=[
 	url(r'^history/$',views.history,name='history'),
 
 	url(r'^orders/$',views.orders,name='orders'),
+	
 	url(r'^sales/$',views.sales,name='sales'),
+	url(r'^get_sales/month$',views.get_sales_month,name='get_sales_month'),
+	url(r'^get_sales/year$',views.get_sales_year,name='get_sales_year'),
+	url(r'^get_sales/week$',views.get_sales_week,name='get_sales_week'),
+
+	url(r'^info/$',views.info,name='info'),
+	url(r'^send/$',views.send,name='send'),
+	url(r'^contact/$',views.contact,name='contact'),
+	url(r'^intro/$',views.intro,name='intro'),
+
 ]

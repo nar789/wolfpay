@@ -1,0 +1,22 @@
+<br><br>
+<div class="list-group">
+	  
+	  
+	  	<button type="button" class="list-group-item list-group-item-action active">
+	    	송금신청내역
+	  	</button>
+	  	
+	  {% for i in send %}
+	  	<button type="button" class="list-group-item list-group-item-action">
+	  		<table width="100%"><tr>
+	  				<td width="80%">
+				  		<h6>{{ i.time }}</h6>&nbsp;&nbsp;
+				  		<h5>{{ i.addr }}&nbsp;&nbsp;</h5>
+				  		<h4>{{ i.price }}&nbsp;<i class="fab fa-btc" aria-hidden="true"></i></h4>
+	  				</td>
+	  				<td style="text-align: right;">
+	  					<span class="badge badge-success">{{ i.state }}</span>
+	  				</td></tr></table>
+	  	</button>
+	  {% endfor %}
+</div>

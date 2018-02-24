@@ -1,0 +1,18 @@
+body{
+	background-color: white;
+}
+
+.back{
+	position: absolute;
+	right:0px;
+	width: 500px;
+	opacity: 0.2;
+	display: block;
+	z-index:1;
+}
+button{
+	position: relative;
+	background-color: black;
+	z-index:2;
+}
+

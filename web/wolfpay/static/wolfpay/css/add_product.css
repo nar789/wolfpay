@@ -1,0 +1,45 @@
+body {
+  padding-bottom: 40px;
+  background-color: #fff;
+}
+h6{
+	color:gray;
+	display: inline-block;
+}
+h5{
+	display: inline-block;
+	color:gray;
+}
+h4{
+	color:#ff9800;
+	vertical-align: middle;
+}
+span{
+	display: inline-block;
+	right:0px;
+	top:0px;
+	margin-top: 10px;
+}
+#add{
+	margin-bottom: 10px;
+}
+.op-input{
+	width: 80%;
+	display: inline-block;
+}
+.badge{
+	margin:0px;
+	vertical-align: middle;
+}
+.btn-danger{
+	margin-bottom: 10px;
+}
+.form-signin-heading{
+	display: inline-block;
+}
+.line{
+	display: inline-block;
+}
+.modal-title{
+	display: inline-block;
+}

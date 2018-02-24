@@ -1,0 +1,39 @@
+body {
+  padding-bottom: 40px;
+  background-color: #fff;
+}
+.form-horizontal{
+	margin-bottom: 15px;
+  	max-width: 600px;
+  	padding: 15px;
+  	margin: 0 auto;
+  	position: relative;
+  	height: auto;
+}
+
+.form-signin-heading{
+	text-align: center;
+}
+
+label{
+	margin-bottom: 15px;
+}
+
+input,
+input::-webkit-input-placeholder {
+    font-size: 11px;
+    padding-top: 3px;
+}
+
+.login-button{
+	margin-top: 5px;
+}
+
+.login-register{
+	font-size: 11px;
+	text-align: center;
+}
+
+#signup-group{
+	margin-top: 30px;
+}

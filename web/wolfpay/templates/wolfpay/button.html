@@ -1,3 +1,8 @@
+{% load staticfiles %}
+<body style="margin:0px;">
+<a href='{% url 'pay' p.id %}' target='_blank'><img width=150 src="{% static 'wolfpay/img/pay.png' %}"></a>
+</body>
+<!--
 <h3>"{{ p.name }}" by (c){{ s.name }}</h3>
 <button onclick="location.href='{% url 'pay' p.id %}'">{{ p.price }}원 결제</button> <i>created by wolfpay</i><br>
-<a href="{% url 'history' %}">결제내역보기</a>
+<a href="{% url 'history' %}">결제내역보기</a>//-->

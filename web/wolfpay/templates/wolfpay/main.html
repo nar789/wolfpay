@@ -1,0 +1,68 @@
+	{% extends "wolfpay/index.html" %}
+	{% block content %}
+	{% load staticfiles %}
+	      <!-- Three columns of text below the carousel -->
+	      <link href="{% static 'wolfpay/css/main.css' %}" rel="stylesheet">
+	      <h2 class="text-center text-info">비트코인 결제 시스템, 알람서비스, 상품마케팅을 무료로 한번에</h2><br>
+	      <h4 class="text-center">PG별도가입 No, 수수료 2%, 보증보험 No, 푸시알람 무료</h4>
+	      <br>
+	      <div class="row">
+	      	<h1 class="text-center subtitle">울프페이의 장점은 무엇일까요?</h1>
+	        <div class="col-lg-4">
+	        	<center><div class="img-circle"><img class=s-img src="{% static 'wolfpay/img/s1.png' %}"></div></center>
+	          <h3>비트코인결제</h3>
+	          <h5>쇼핑몰,페이스북,인스타,SNS,블로그 </h5>
+	          <p><a class="btn btn-default" href="{% url 'intro' %}" role="button">View details &raquo;</a></p>
+	        </div><!-- /.col-lg-4 -->
+	        <div class="col-lg-4">
+	          <center><div class="img-circle"><img class=s-img src="{% static 'wolfpay/img/s2.png' %}"></div></center>
+	          <h3>자동마케팅</h3>
+	          <h5>타사 결제창에 자사 상품 노출</h5>
+	          <p><a class="btn btn-default" href="{% url 'intro' %}" role="button">View details &raquo;</a></p>
+	        </div><!-- /.col-lg-4 -->
+	        <div class="col-lg-4">
+	         <center><div class="img-circle"><img class=s-img src="{% static 'wolfpay/img/s3.png' %}"></div></center>
+	          <h3>푸시알람서비스</h3>
+	          <h5>고개 결제시 앱을 통한 푸시알람</h5>
+	          <p><a class="btn btn-default" href="{% url 'intro' %}" role="button">View details &raquo;</a></p>
+	        </div><!-- /.col-lg-4 -->
+	      </div><!-- /.row -->
+
+
+	      <!-- START THE FEATURETTES -->
+
+<!--
+	      <div class="row featurette">
+	        <div class="col-md-7">
+	          <h2 class="featurette-heading">First featurette heading. <span class="text-muted">It'll blow your mind.</span></h2>
+	          <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
+	        </div>
+	        <div class="col-md-5">
+	          <img class="featurette-image img-responsive" data-src="holder.js/500x500/auto" alt="Generic placeholder image">
+	        </div>
+	      </div>
+
+	      <hr class="featurette-divider">
+
+	      <div class="row featurette">
+	        <div class="col-md-5">
+	          <img class="featurette-image img-responsive" data-src="holder.js/500x500/auto" alt="Generic placeholder image">
+	        </div>
+	        <div class="col-md-7">
+	          <h2 class="featurette-heading">Oh yeah, it's that good. <span class="text-muted">See for yourself.</span></h2>
+	          <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
+	        </div>
+	      </div>
+
+	      <hr class="featurette-divider">
+
+	      <div class="row featurette">
+	        <div class="col-md-7">
+	          <h2 class="featurette-heading">And lastly, this one. <span class="text-muted">Checkmate.</span></h2>
+	          <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
+	        </div>
+	        <div class="col-md-5">
+	          <img class="featurette-image img-responsive" data-src="holder.js/500x500/auto" alt="Generic placeholder image">
+	        </div>
+	      </div>//-->
+    {% endblock %}

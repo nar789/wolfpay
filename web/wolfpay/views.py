@@ -4,18 +4,20 @@ from __future__ import unicode_literals
 from django.shortcuts import render,redirect,get_object_or_404
 from django.http import HttpResponse
 from .forms import LoginForm,Join1Form,Join2Form
-from .models import Shop,Product,Transaction
+from .models import Shop,Product,Transaction,Send
 from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.contrib.auth import login,authenticate,logout
 from .coin import create_address, get_transaction
 import datetime
 import requests,json
+from django.db.models import Sum
+from django.core.mail import EmailMessage
 # Create your views here.
 
 def index(request):
-	context={'user':request.user}
-	return render(request,'wolfpay/index.html',context)
+	context={'user':request.user,'main':True}
+	return render(request,'wolfpay/main.html',context)
 
 
 def loginview(request):
@@ -28,7 +30,7 @@ def loginview(request):
 			login(request,user)
 			return redirect('index')
 		else:
-			return HttpResponse('login fail');
+			return render(request,"wolfpay/complete_product.html",{'msg':'로그인에 실패했습니다.'})
 	else:
 		form=LoginForm()
 		return render(request,"wolfpay/login.html",{'form':form})
@@ -73,7 +75,6 @@ def button(request,pid):
 	s=get_object_or_404(Shop,id=p.sid.id)
 	return render(request,"wolfpay/button.html",{'p':p,'s':s})
 
-
 def pay(request,pid):
 	p=get_object_or_404(Product,id=pid)
 	s=get_object_or_404(Shop,id=p.sid.id)
@@ -92,9 +93,9 @@ def pay(request,pid):
 			t.price=price
 			t.op=op
 			t.save()
-			return HttpResponse("송금요청을 완료했습니다.")				
+			return render(request,"wolfpay/complete_pay.html",{'msg':'송금요청이 완료되었습니다.'})
 		else:
-			return HttpResponse("유효시간이 만료되었습니다.")
+			return render(request,"wolfpay/complete_pay.html",{'msg':'유효시간이 만료되었습니다.'})
 	else:
 		addr=create_address(s,p)
 		t=Transaction(sid=s,pid=p,addr=addr.address,time=datetime.datetime.now())
@@ -126,11 +127,11 @@ def history(request):
 		name=request.POST["name"]
 		phone=request.POST["phone"]
 		if not name or not phone:
-			return HttpResponse("결제 내역이 존재하지 않습니다.")
-		t=Transaction.objects.filter(name=name,phone=phone)
+			return render(request,"wolfpay/complete_pay.html",{'msg':'결제 내역이 존재하지 않습니다.'})
+		t=Transaction.objects.filter(name=name,phone=phone).order_by('-time')
 		s=get_transaction_list(t)
 		if len(s)==0:
-			return HttpResponse("결제 내역이 존재하지 않습니다.")
+			return render(request,"wolfpay/complete_pay.html",{'msg':'결제 내역이 존재하지 않습니다.'})
 	return render(request,"wolfpay/history.html",{'s':s})
 
 def add_product(request):
@@ -144,7 +145,7 @@ def add_product(request):
 			op=request.POST['op']
 			p=Product(name=name,url=url,price=price,op=op,sid=s)
 			p.save()
-			return HttpResponse("상품생성이 완료됐습니다.")
+			return render(request,"wolfpay/complete_product.html",{'msg':'상품생성이 완료되었습니다.','callback':'product'})
 		else:
 			return render(request,"wolfpay/add_product.html",{})
 	else:
@@ -164,7 +165,7 @@ def update_product(request,id):
 			p.price=price
 			p.op=op
 			p.save()
-			return redirect('product')
+			return render(request,"wolfpay/complete_product.html",{'msg':'상품수정이 완료되었습니다.','callback':'product'})
 		else:
 			return render(request,"wolfpay/add_product.html",{'update':True,'p':p})
 	else:
@@ -174,7 +175,7 @@ def delete_product(request,id):
 	if request.user.is_authenticated:
 		p=get_object_or_404(Product,id=id)
 		p.delete()
-		return redirect('product')
+		return render(request,"wolfpay/complete_product.html",{'msg':'상품삭제가 완료되었습니다.','callback':'product'})
 	else:
 		return redirect('login')
 
@@ -221,16 +222,126 @@ def orders(request):
 			t=Transaction.objects.filter(sid=s).exclude(name='').order_by('-time')[start:end]
 			ft=get_transaction_list(t)
 			if len(ft)==0:
-				return HttpResponse("결제 내역이 존재하지 않습니다.")
+				return render(request,"wolfpay/complete_product.html",{'msg':'결제 내역이 존재하지 않습니다.'})
 			return render(request,"wolfpay/get_orders.html",{'s':ft})
 		else:
 			t=Transaction.objects.filter(sid=s).exclude(name='').order_by('-time')[:5]
 			ft=get_transaction_list(t)
 			if len(ft)==0:
-				return HttpResponse("결제 내역이 존재하지 않습니다.")
+				return render(request,"wolfpay/complete_product.html",{'msg':'결제 내역이 존재하지 않습니다.'})
 			return render(request,"wolfpay/orders.html",{'s':ft})
 	else:
 		return redirect('login')
 
 def sales(request):
-	return HttpResponse("sales")
+	if request.user.is_authenticated:
+		s=Shop.objects.get(user=request.user)
+		total=Transaction.objects.filter(sid=s).aggregate(sum=Sum('receive'))
+		return render(request,"wolfpay/sales.html",{'total':total['sum']})
+	else:
+		return redirect('login')
+
+def get_sales_month(request):
+	if request.user.is_authenticated:
+		s=Shop.objects.get(user=request.user)
+		year=request.GET['year']
+		ret=[]
+		for i in range(1,13):
+			t=Transaction.objects.filter(sid=s,time__month=i,time__year=year).aggregate(sum=Sum('receive'))
+			if t['sum'] is None:
+				t['sum']=0.0
+			ret.append({'month':str(i),'sum':t['sum']})
+		ret=json.dumps(ret)
+		return HttpResponse(ret)
+	else:
+		return redirect('login')
+
+def get_sales_year(request):
+	if request.user.is_authenticated:
+		s=Shop.objects.get(user=request.user)
+		end=datetime.date.today().year
+		start=end-9
+		ret=[]
+		for i in range(start,end+1):
+			t=Transaction.objects.filter(sid=s,time__year=i).aggregate(sum=Sum('receive'))
+			if t['sum'] is None:
+				t['sum']=0.0
+			ret.append({'year':i,'sum':t['sum']})
+		ret=json.dumps(ret)
+		return HttpResponse(ret)
+	else:
+		return redirect('login')
+
+def get_sales_week(request):
+	if request.user.is_authenticated:
+		s=Shop.objects.get(user=request.user)
+		week=request.GET['week']
+		week=int(week)
+		week*=7
+		d=datetime.timedelta(days=week)
+		start=datetime.date.today()-d
+		ret=[]
+		for i in range(0,7):
+			start=start+datetime.timedelta(days=1)
+			end=start+datetime.timedelta(days=1)
+			t=Transaction.objects.filter(sid=s,time__range=[start,end]).aggregate(sum=Sum('receive'))
+			if t['sum'] is None:
+				t['sum']=0.0
+			ret.append({'date':start.strftime('%m/%d'),'sum':t['sum']})
+		ret=json.dumps(ret)
+		return HttpResponse(ret)
+	else:
+		return redirect('login')
+
+def info(request):
+	if request.user.is_authenticated:
+		s=Shop.objects.get(user=request.user)
+		if request.method=="POST":
+			name=request.POST['name']
+			addr=request.POST['addr']
+			phone=request.POST['phone']
+			site=request.POST['site']
+			s.name=name;s.addr=addr;s.phone=phone;s.site=site;
+			s.save()
+			return render(request,"wolfpay/complete_product.html",{'msg':'수정이 완료되었습니다.'})
+		else:
+			total=Transaction.objects.filter(sid=s).aggregate(sum=Sum('receive'))
+			return render(request,"wolfpay/info.html",{'s':s,'total':total['sum']})
+	else:
+		return redirect('login')
+
+def send(request):
+	if request.user.is_authenticated:
+		s=Shop.objects.get(user=request.user)
+
+		if request.GET['save']=="True":
+			price=request.GET['price']
+			total=Transaction.objects.filter(sid=s).aggregate(sum=Sum('receive'))
+			if float(price)>total['sum']:
+				return HttpResponse('Warning:보유금액보다 큰 금액을 송금할 수 없습니다.')
+			addr=request.GET['addr']
+			send=Send(sid=s,price=price,addr=addr,state='처리중',time=datetime.datetime.now())
+			send.save()
+			return HttpResponse('송금신청이 완료되었습니다.')
+		else:
+			send=Send.objects.filter(sid=s).order_by("-time")
+			for i in send:
+				i.time=i.time.strftime("%Y-%m-%d %H:%M:%S")
+			return render(request,'wolfpay/send.html',{'send':send})
+	else:
+		return redirect('login')
+
+def contact(request):
+	if request.method=="POST":
+		title=request.POST['title']
+		detail=request.POST['detail']
+		email=request.POST['email']
+		mail_title='울프페이::'+email+'님의 문의사항'
+		mail_body='title:'+title+'\ndetail:'+detail
+		e = EmailMessage(mail_title, mail_body, to=['admin@hume.co.kr'])
+		e.send()
+		return render(request,"wolfpay/complete_product.html",{'msg':'문의사항이 접수되었습니다.'})
+	return render(request,"wolfpay/contact.html",{})
+
+def intro(request):
+	return render(request,"wolfpay/complete_product.html",{'msg':'더욱 자세한 서비스소개를 준비중입니다.'})

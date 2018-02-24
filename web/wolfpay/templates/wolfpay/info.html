@@ -1,0 +1,83 @@
+{% extends "wolfpay/index.html" %}
+{% block content %}
+{% load staticfiles %}
+<link href="{% static 'wolfpay/css/info.css' %}" rel="stylesheet">
+<link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
+<form method="POST">
+	{% csrf_token %}
+	<h3 class="form-signin-heading">{{ s.user.username }}님의 가맹점 정보</h3>
+	<hr>
+	<div class="form-group">
+		<label for="name" class="cols-sm-2 control-label">상호명</label>
+		<div class="cols-sm-10">
+			<div class="input-group">
+				<span class="input-group-addon"><i class="fa fa-tag" aria-hidden="true"></i></span>
+				<input type="text" class="form-control" name="name" id="name"  value="{{ s.name }}" required autofocus/>
+			</div>
+		</div>
+	</div>
+	<div class="form-group">
+		<label for="name" class="cols-sm-2 control-label">가맹점주소</label>
+		<div class="cols-sm-10">
+			<div class="input-group">
+				<span class="input-group-addon"><i class="fa fa-address-book" aria-hidden="true"></i></span>
+				<input type="text" class="form-control" name="addr" id="addr"  value="{{ s.addr }}" required/>
+			</div>
+		</div>
+	</div>
+	<div class="form-group">
+		<label for="name" class="cols-sm-2 control-label">대표자 폰번호</label>
+		<div class="cols-sm-10">
+			<div class="input-group">
+				<span class="input-group-addon"><i class="fas fa-phone" aria-hidden="true"></i></span>
+				<input type="text" class="form-control" name="phone" id="phone"  value="{{ s.phone }}" required/>
+			</div>
+		</div>
+	</div>
+	<div class="form-group">
+		<label for="name" class="cols-sm-2 control-label">대표사이트</label>
+		<div class="cols-sm-10">
+			<div class="input-group">
+				<span class="input-group-addon"><i class="fas fa-home" aria-hidden="true"></i></span>
+				<input type="text" class="form-control" name="site" id="site" value="{{ s.site }}" required/>
+			</div>
+		</div>
+	</div>
+	<hr>
+
+	<div class="alert alert-info" role="alert">
+  		{% if total is None %}
+			총매출합계 : 0.0 BTC
+		{% else %}
+			총매출합계 : {{ total }} BTC
+		{% endif %}
+	</div>
+	<div class="form-group">
+		<label for="name" class="cols-sm-2 control-label">신청금액(단위:BTC)</label>
+		<div class="cols-sm-10">
+			<div class="input-group">
+				<span class="input-group-addon"><i class="fab fa-btc" aria-hidden="true"></i></span>
+				<input type="text" class="form-control" id="price" placeholder='예: 0.001'/>
+			</div>
+		</div>
+	</div>
+	<div class="form-group">
+		<label for="name" class="cols-sm-2 control-label">송금될 지갑주소</label>
+		<div class="cols-sm-10">
+			<div class="input-group">
+				<span class="input-group-addon"><i class="fas fa-share-square" aria-hidden="true"></i></span>
+				<input type="text" class="form-control" id="btcaddr" placeholder='지갑 주소를 입력해주세요.'/>
+			</div>
+		</div>
+	</div>
+	<button type="button" class="btn btn-success" onclick='send()'>송금신청</button>
+	<button type="button" class="btn btn-info" onclick='sendlist()'>송금내역보기</button>
+	<div id=sendlist>
+	</div>
+	<hr>
+	<button type="submit" class="btn btn-primary btn-lg btn-block">정보수정하기</button>
+</form>
+<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="{% static 'wolfpay/js/info.js' %}"></script>
+<script> sendurl="{% url 'send' %}";</script>
+{% endblock %}

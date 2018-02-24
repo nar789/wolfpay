@@ -1,6 +1,29 @@
 {% for si in s %}
-		  <h5>{{ si.id }} / {{si.name}} / {{si.addr}} / {{ si.customer }} / {{ si.phone }}</h5>
-		  <div id=op{{ si.id }}><script>show_option("{{ si.op|escapejs }}","{{ si.id }}");</script></div>
-		  {{si.time}} / 가격:{{si.korprice}}원 / 확정된금액:{{si.price}} / 입금된금액:{{si.btcprice}} / 상태:{{si.status}}
-		  <hr>
+	<button type="button" class="list-group-item list-group-item-action table-responsive" style="padding-left: 0px; padding-right: 0px;">
+					<table class="text-center table">
+						<tr>
+							<td colspan="3"><div class="id">No.{{ si.id }}</div><p class=time>주문시간 {{si.time}}</p></td>
+						</tr>
+						<tr>
+							<td colspan="3"><h3 class="line">{{si.name}}</h3> <h6 class=line><a href="{{ si.url }}" target="blank"><i class="fas fa-link">상품페이지</i></a></h6></td>
+						</tr>
+						<tr height='50'>
+							<td colspan="3"><div id=op{{ si.id }}><script>show_option("{{ si.op|escapejs }}","{{ si.id }}");</script></div></td>
+						</tr>
+						<tr height=50>
+							<td><h6 class=info><i class="fas fa-address-book"></i>입금주소</h6>
+								<h5><p class="addr">{{si.addr}}</p></h5>
+							</td>
+							<td><h6 class=info><i class="fas fa-user"></i>고객명</h6>
+								<h5>{{ si.customer }}</h5>
+							</td>
+							<td><h6 class=info><i class="fas fa-phone"></i>폰번호</h6>
+								<h5>{{ si.phone }}</h5>
+							</td>
+						</tr>
+						<tr class=tr-prc>
+							<td width="33%"><h6 class=info><i class="fas fa-won-sign"></i>원화</h6> <h5>{{si.korprice}}원</h5></td><td width="33%"><h6 class=info><i class="fab fa-btc" aria-hidden="true"></i>확정금액</h6> <h5>{{ si.price }}</h5></td><td width="33%"><h6 class=info><i class="fab fa-btc" aria-hidden="true"></i>입금금액</h6> <h5>{{ si.btcprice }}</h5></td>
+						</tr>
+					</table>
+				</button>
 {% endfor %}

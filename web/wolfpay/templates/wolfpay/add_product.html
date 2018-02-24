@@ -1,33 +1,105 @@
+{% extends "wolfpay/index.html" %}
+{% block content %}
 {% load staticfiles %}
-<body>
+	<link href="{% static 'wolfpay/css/add_product.css' %}" rel="stylesheet">
+	<link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
+	<a href='{% url 'product' %}'><i class="fas fa-arrow-left"></i>&nbsp;상품목록</a><br>
+	<h3 class="form-signin-heading"><i class="fas fa-shopping-cart"></i>&nbsp;
+		{% if update is True %}
+			상품수정
+		{% else %}
+			상품추가
+		{% endif %}
+	</h3>
+	{% if update is True %}
+			&nbsp;<b class="btn btn-danger" data-toggle="modal" data-target="#delete-modal"><i class="fas fa-trash-alt"></i></b>
+	{% endif %}
+	<hr>
 	<form id=add_prod_form method="POST">
 		{% csrf_token %}	
-		상품명 <input id=name name="name" value="{{ p.name }}"><br>
-		상품페이지주소 <input id=url name="url" value="{{ p.url }}"><br>
-		상품가격 <input id=price name="price" value="{{ p.price }}"><br>
+		<div class="form-group">
+		<label for="name" class="cols-sm-2 control-label">상품명</label>
+		<div class="cols-sm-10">
+				<div class="input-group">
+					<span class="input-group-addon"><i class="fa fa-tag" aria-hidden="true"></i></span>
+					<input type="text" class="form-control" name="name" id="name"  value="{{ p.name }}" required autofocus/>
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="name" class="cols-sm-2 control-label">상품페이지주소</label>
+			<div class="cols-sm-10">
+				<div class="input-group">
+					<span class="input-group-addon"><i class="fas fa-home" aria-hidden="true"></i></span>
+					<input type="text" class="form-control" name="url" id="url" value="{{ p.url }}" required/>
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="name" class="cols-sm-2 control-label">상품가격</label>
+			<div class="cols-sm-10">
+				<div class="input-group">
+					<span class="input-group-addon"><i class="fas fa-won-sign"></i></span>
+					<input type="text" class="form-control" name="price" id="price" value="{{ p.price }}" required/>
+				</div>
+			</div>
+		</div>
 		<input type=hidden id=op name=op>
 		<hr>
-		옵션이름 <input id="op_title"><br>
-		옵션내용 <b onclick='add()'>추가</b><br>
-		<div id=op_container>
-			<div id=op1><input id="op_content1"><b onclick='del(1)'>삭제</b></div>
+		<div class="form-group">
+			<label for="name" class="cols-sm-2 control-label">옵션이름</label>
+			<div class="cols-sm-10">
+				<div class="input-group">
+					<span class="input-group-addon"><i class="fas fa-caret-square-down"></i></span>
+					<input type="text" class="form-control" id="op_title"/>
+				</div>
+			</div>
 		</div>
-		<br><div id=op_save onclick="op_save()" style="width:200px; height: 30px; background-color: gray; color:white; text-align: center;line-height: 30px;">옵션저장</div>
+		<label for="name" class="cols-sm-2 control-label">옵션내용</label> <b onclick='add()' id=add class="btn btn-success"><i class="fas fa-plus"></i></b><br>
+		<div id=op_container>
+			<div id=op1><input id="op_content1" class="form-control op-input">&nbsp;<b onclick='del(1)' class="btn btn-danger"><i class="fas fa-trash-alt"></i></b></div>
+		</div>
+		<br><div id=op_save onclick="op_save()" class="btn btn-info">옵션저장</div>
 		<hr>
 		<div id=op_confirm>
 		</div>
 		<br>
-		<div id=save onclick='save()' style="width:200px; height: 30px; background-color: black; color:white; text-align: center;line-height: 30px;">
+		<div id=save onclick='save()' class="btn btn-success btn-block btn-lg">
 			{% if update is True %}
 			상품수정
 			{% else %}
 			상품생성
 			{% endif %}
 		</div>
+		<br>
+		<a href='{% url 'product' %}'><i class="fas fa-arrow-left"></i>&nbsp;상품목록</a><br>
 	</form>
-</body>
+
+	{% if update is True %}
+	<div class="modal fade" id="delete-modal" tabindex="-1" role="dialog" aria-labelledby="delmodal" aria-hidden="true">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h3 class="modal-title" id="delmodal">상품삭제</h3>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	      <div class="modal-body">
+	        <h3>{{ p.name }}를 삭제하시겠습니까? </h3>
+	        <h5 style="color:red;">※복원이 불가하며, 연관된 결제버튼이 모두 중지됩니다.</h5>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+	        <button type="button" class="btn btn-danger" onclick="location.href='{% url 'delete_product' p.id %}'">삭제</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	{% endif %}
 <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.1.min.js"></script>
 <script type="text/javascript" src="{% static 'wolfpay/js/add_product.js' %}"></script>
 {% if p is not None %}
 		<script>insert_option("{{ p.op|escapejs }}");</script>
 {% endif %}
+{% endblock %}

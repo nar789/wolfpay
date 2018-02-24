@@ -119,3 +119,17 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'mw-002.cafe24.com'
+
+# Port for sending e-mail.
+EMAIL_PORT = 587
+
+# Optional SMTP authentication information for EMAIL_HOST.
+EMAIL_HOST_USER = 'admin@hume.co.kr'
+EMAIL_HOST_PASSWORD = 'l323585!'
+EMAIL_USE_TLS = False
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER

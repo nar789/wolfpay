@@ -14,7 +14,7 @@ class Shop(models.Model):
 	user=models.OneToOneField(User,on_delete=models.CASCADE)
 
 	def __str__(self):
-		return self.name
+		return "shop%s" % self.id
 
 class Product(models.Model):
 	sid=models.ForeignKey('Shop',on_delete=models.CASCADE)
@@ -24,11 +24,11 @@ class Product(models.Model):
 	op=models.TextField()
 	
 	def __str__(self):
-		return self.name
+		return "product#%s" % self.id
 
 class Transaction(models.Model):
 	sid=models.ForeignKey('Shop',on_delete=models.CASCADE)
-	pid=models.ForeignKey('Product',on_delete=models.CASCADE)
+	pid=models.ForeignKey('Product',on_delete=models.SET_NULL,null=True)
 	state=models.CharField(max_length=255)
 	addr=models.CharField(max_length=255)
 	name=models.CharField(max_length=255)
@@ -39,4 +39,14 @@ class Transaction(models.Model):
 	receive=models.FloatField(null=True)
 
 	def __str__(self):
-		return "%s#%s" %(self.sid.id,self.pid.id)
+		return "%s#%s#%s" %(self.id,self.sid.id,self.pid.id)
+
+class Send(models.Model):
+	sid=models.ForeignKey('Shop',on_delete=models.CASCADE)
+	time=models.DateTimeField(auto_now_add=True,blank=True)
+	price=models.FloatField(null=True)
+	addr=models.CharField(max_length=255)
+	state=models.CharField(max_length=255)
+
+	def __str__(self):
+		return "%s" %(self.id)
