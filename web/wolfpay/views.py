@@ -15,6 +15,9 @@ from django.db.models import Sum
 from django.core.mail import EmailMessage
 # Create your views here.
 
+def robots(request):
+	return render(request,'wolfpay/robots.txt',{})
+
 def index(request):
 	context={'user':request.user,'main':True}
 	return render(request,'wolfpay/main.html',context)

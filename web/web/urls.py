@@ -15,9 +15,11 @@ Including another URLconf
 """
 from django.conf.urls import include,url
 from django.contrib import admin
+from wolfpay.views import robots
 
 urlpatterns = [
 	url(r'^$',include('wolfpay.urls')),
+    url(r'^robots.txt$',robots),
 	url(r'^wolfpay/',include('wolfpay.urls')),
     url(r'^admin/', admin.site.urls),
 ]

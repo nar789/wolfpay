@@ -3,6 +3,7 @@ from . import views
 
 urlpatterns=[
 	url(r'^$',views.index,name='index'),
+	url(r'^robots.txt$',views.robots,name='robots'),
 
 	url(r'^accounts/logout/$',views.logoutview,name='logout'),
 	url(r'^accounts/login/$',views.loginview,name='login'),
