@@ -16,6 +16,7 @@ from django.core.mail import EmailMessage
 # Create your views here.
 
 def index(request):
+	return HttpResponse('hi')
 	context={'user':request.user,'main':True}
 	return render(request,'wolfpay/main.html',context)
 
